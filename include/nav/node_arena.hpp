@@ -10,12 +10,12 @@ public:
     FaceId m_min_face_id;
     FaceId m_max_face_id;
 
-    NodeEdgeLocation m_edge_location;
+    EdgeLocation m_edge_location;
 
     NodeId(
         FaceId face_id_a,
         FaceId face_id_b,
-        NodeEdgeLocation edge_location
+        EdgeLocation edge_location
     ) : m_edge_location(edge_location) {
         if (face_id_a <= face_id_b) {
             m_min_face_id = face_id_a;
@@ -82,7 +82,7 @@ public:
     get_node(
         FaceId prev_face_id,
         FaceId next_face_id,
-        NodeEdgeLocation location = NodeEdgeLocation::MIDDLE
+        EdgeLocation location = EdgeLocation::MIDDLE
     );
 
     const Node *

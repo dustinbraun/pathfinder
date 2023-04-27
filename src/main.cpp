@@ -132,7 +132,7 @@ void render_node_arena(SDL_Renderer * renderer, const Mesh & mesh, const NodeAre
 
         if (node.m_state.m_parent_node != nullptr) {
             Point parent_pos = node.m_state.m_parent_node->m_state.m_pos;
-            SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+            SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
             SDL_RenderDrawLine(
                 renderer,
                 node.m_state.m_pos.m_x,

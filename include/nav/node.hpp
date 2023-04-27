@@ -2,14 +2,9 @@
 
 #include "face_id.hpp"
 #include "point.hpp"
+#include "edge_location.hpp"
 
 class Node;
-
-enum class NodeEdgeLocation {
-    LEFT   = 0,
-    MIDDLE = 1,
-    RIGHT  = 2,
-};
 
 class NodeState {
 public:
@@ -25,6 +20,6 @@ class Node {
 public:
     FaceId m_prev_face;
     FaceId m_next_face;
-    NodeEdgeLocation m_edge_location;
+    EdgeLocation m_edge_location;
     NodeState m_state;
 };

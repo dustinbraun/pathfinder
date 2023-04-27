@@ -4,7 +4,7 @@ Node *
 NodeArena::get_node(
     FaceId prev_face_id,
     FaceId next_face_id,
-    NodeEdgeLocation edge_location
+    EdgeLocation edge_location
 ) {
     NodeId node_id(prev_face_id, next_face_id, edge_location);
     uint16_t hash = get_hash(node_id);

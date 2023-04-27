@@ -12,6 +12,7 @@
 #include "point.hpp"
 #include "vertex.hpp"
 #include "vertex_data.hpp"
+#include "edge_location.hpp"
 
 class Mesh {
 public:
@@ -22,6 +23,13 @@ public:
         const FaceData * faces,
         size_t num_faces
     );
+
+    Point
+    get_point_of_edge_location(
+        const Face & face,
+        size_t edge_index,
+        EdgeLocation edge_location
+    ) const;
 
     bool
     point_is_inside_face(

@@ -1,5 +1,33 @@
 #include "nav/mesh.hpp"
 
+Point
+Mesh::get_point_of_edge_location(
+    const Face & face,
+    size_t edge_index,
+    EdgeLocation edge_location
+) const {
+    VertexId vertex_id_a;
+    VertexId vertex_id_b;
+    face.get_edge_vertex_ids(edge_index, vertex_id_a, vertex_id_b);
+    const Vertex & vertex_a = m_vertices[vertex_id_a];
+    const Vertex & vertex_b = m_vertices[vertex_id_b];
+    if (edge_location == EdgeLocation::MIDDLE) {
+        return Point(
+            (vertex_a.m_pos.m_x + vertex_b.m_pos.m_x) / 2.0f,
+            (vertex_a.m_pos.m_y + vertex_b.m_pos.m_y) / 2.0f
+        );
+    }
+    if (edge_location == EdgeLocation::LEFT) {
+        // Assuming faces are in CCW order.
+        return vertex_b.m_pos;
+    }
+    if (edge_location == EdgeLocation::RIGHT) {
+        // Assuming faces are in CCW order.
+        return vertex_a.m_pos;
+    }
+    assert(false);
+}
+
 void
 Mesh::import(
     const VertexData * vertices,
