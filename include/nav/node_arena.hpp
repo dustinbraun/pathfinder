@@ -1,5 +1,7 @@
 #pragma once
 
+#include <array>
+
 #include "mesh.hpp"
 #include "node.hpp"
 
@@ -8,10 +10,13 @@ public:
     FaceId m_min_face_id;
     FaceId m_max_face_id;
 
+    NodeEdgeLocation m_edge_location;
+
     NodeId(
         FaceId face_id_a,
-        FaceId face_id_b
-    ) {
+        FaceId face_id_b,
+        NodeEdgeLocation edge_location
+    ) : m_edge_location(edge_location) {
         if (face_id_a <= face_id_b) {
             m_min_face_id = face_id_a;
             m_max_face_id = face_id_b;
@@ -26,14 +31,14 @@ public:
     operator == (
         const NodeId& rhs
     ) const {
-        return (m_min_face_id == rhs.m_min_face_id) && (m_max_face_id == rhs.m_max_face_id);
+        return (m_min_face_id == rhs.m_min_face_id) && (m_max_face_id == rhs.m_max_face_id) && (m_edge_location == rhs.m_edge_location);
     }
 
     bool
     operator != (
         const NodeId& rhs
     ) const {
-        return (m_min_face_id != rhs.m_min_face_id) || (m_max_face_id != rhs.m_max_face_id);
+        return (m_min_face_id != rhs.m_min_face_id) || (m_max_face_id != rhs.m_max_face_id) || (m_edge_location != rhs.m_edge_location);
     }
 };
 
@@ -76,7 +81,8 @@ public:
     Node *
     get_node(
         FaceId prev_face_id,
-        FaceId next_face_id
+        FaceId next_face_id,
+        NodeEdgeLocation location = NodeEdgeLocation::MIDDLE
     );
 
     const Node *
@@ -98,6 +104,6 @@ private:
         NodeId node_id
     ) {
         // ToDo: More sophisticating hashing function.
-        return (static_cast<uint16_t>(node_id.m_min_face_id) ^ static_cast<uint16_t>(node_id.m_max_face_id)) % (m_capacity*2);
+        return (static_cast<uint16_t>(node_id.m_min_face_id) ^ static_cast<uint16_t>(node_id.m_max_face_id) ^ static_cast<uint16_t>(node_id.m_edge_location)) % (m_capacity*2);
     }
 };
