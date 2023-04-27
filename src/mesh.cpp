@@ -31,7 +31,7 @@ Mesh::import(
         face.m_adj_ids[2] = FACE_ID_NONE;
         m_faces.push_back(face);
     }
-    connect();
+    connect_faces();
 }
 
 bool
@@ -143,7 +143,7 @@ Mesh::try_connect_face(
 }
 
 void
-Mesh::connect(
+Mesh::connect_faces(
 ) {
     for (size_t face_a_id = 0; face_a_id < m_faces.size(); ++face_a_id) {
         for (size_t face_b_id = face_a_id + 1; face_b_id < m_faces.size(); ++face_b_id) {
@@ -151,43 +151,4 @@ Mesh::connect(
             try_connect_face(face_b_id, face_a_id);
         }
     }
-}
-
-
-FaceId
-Mesh::add_face(
-    VertexId vertex_id0,
-    VertexId vertex_id1,
-    VertexId vertex_id2
-) {
-    Face face {
-        .m_vertex_ids = {
-            vertex_id0,
-            vertex_id1,
-            vertex_id2,
-        },
-        .m_adj_ids = {
-            FACE_ID_NONE,
-            FACE_ID_NONE,
-            FACE_ID_NONE,
-        },
-    };
-    assert(m_faces.size() <= FACE_ID_MAX);
-    FaceId face_id = static_cast<FaceId>(m_faces.size());
-    m_faces.push_back(face);
-    return face_id;
-}
-
-VertexId
-Mesh::add_vertex(
-    float x,
-    float y
-) {
-    Vertex vertex;
-    vertex.m_pos.m_x = x;
-    vertex.m_pos.m_y = y;
-    assert(m_vertices.size() < VERTEX_ID_MAX);
-    VertexId vertex_id = static_cast<VertexId>(m_vertices.size());
-    m_vertices.push_back(vertex);
-    return vertex_id;
 }

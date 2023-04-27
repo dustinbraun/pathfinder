@@ -94,6 +94,11 @@ public:
         size_t edge_index
     ) const;
 
+private:
+    std::vector<Face> m_faces;
+
+    std::vector<Vertex> m_vertices;
+
     bool
     try_connect_face(
         FaceId face_id_a,
@@ -101,26 +106,7 @@ public:
     );
 
     void
-    connect();
-
-    FaceId
-    add_face(
-        VertexId vertex_id0,
-        VertexId vertex_id1,
-        VertexId vertex_id2
-    );
-
-    VertexId
-    add_vertex(
-        float x,
-        float y
-    );
-
-private:
-    std::vector<Face> m_faces;
-
-    std::vector<Vertex> m_vertices;
-
+    connect_faces();
 
     static
     float cross(
