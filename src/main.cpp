@@ -81,6 +81,7 @@ void render_mesh(SDL_Renderer * renderer, const Mesh & mesh) {
 
 void render_path(SDL_Renderer * renderer, const Mesh & mesh, const std::vector<FaceId> & path) {
     for (auto face_id : path) {
+        //std::cout << face_id << std::endl;
         const Face & face = mesh.get_face_by_id(face_id);
         SDL_Rect rect;
         Point center_point = mesh.get_face_center_point(face);
@@ -194,6 +195,8 @@ int main() {
         SDL_Delay(50);
     });
 
+    std::vector<FaceId> path;
+
     while (true)
     {
         SDL_Event event;
@@ -219,14 +222,12 @@ int main() {
             if (event.type == SDL_MOUSEBUTTONDOWN) {
                 int x = event.button.x;
                 int y = event.button.y;
-                FaceId face_id = mesh.get_face_id_containing_point(Point(x, y));
                 if (event.button.button == SDL_BUTTON_LEFT) {
                     FaceId new_start_face_id = mesh.get_face_id_containing_point(Point(x, y));
                     if (new_start_face_id != FACE_ID_NONE) {
                         start_face_id = new_start_face_id;
                         start_pos = Point(x, y);
-                        std::vector<FaceId> path = query.search(mesh, start_face_id, start_pos, end_face_id, end_pos);
-
+                        path = query.search(mesh, start_face_id, start_pos, end_face_id, end_pos);
                     }
                 }
                 if (event.button.button == SDL_BUTTON_RIGHT) {
@@ -234,7 +235,7 @@ int main() {
                     if (new_end_face_id != FACE_ID_NONE) {
                         end_face_id = new_end_face_id;
                         end_pos = Point(x, y);
-                        std::vector<FaceId> path = query.search(mesh, start_face_id, start_pos, end_face_id, end_pos);
+                        path = query.search(mesh, start_face_id, start_pos, end_face_id, end_pos);
 
                     }
                 }
@@ -245,6 +246,7 @@ int main() {
         SDL_RenderClear(renderer);
 
         render_mesh(renderer, mesh);
+        render_path(renderer, mesh, path);
 
         SDL_RenderPresent(renderer);
     }

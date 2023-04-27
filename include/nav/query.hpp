@@ -48,6 +48,12 @@ private:
         Node & node,
         Point end_pos
     );
+
+    static
+    std::vector<FaceId>
+    generate_path(
+        const Node & node
+    );
 };
 
 #endif
