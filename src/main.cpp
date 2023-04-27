@@ -122,7 +122,7 @@ int main() {
 
     
     Mesh mesh;
-    mesh.load("data/example.map");
+    mesh.load("example.map");
 
     std::vector<VertexId> vertex_ids;
 
@@ -133,7 +133,7 @@ int main() {
 
     Query query([&] (const Mesh & mesh, const NodeArena & node_arena) {
         render_debug(renderer, mesh, node_arena);
-        SDL_Delay(500);
+        SDL_Delay(50);
     });
 
     while (true)

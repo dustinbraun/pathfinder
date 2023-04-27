@@ -29,6 +29,15 @@ public:
             m_y - rhs.m_y
         );
     }
+
+    float
+    get_square_distance(
+        const Point& other
+    ) const {
+        float dx = m_x - other.m_x;
+        float dy = m_y - other.m_y;
+        return dx*dx + dy*dy;
+    }
 };
 
 #endif
