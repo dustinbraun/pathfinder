@@ -10,6 +10,55 @@ constexpr int WINDOW_H = 800;
 
 #include <SDL2/SDL.h>
 
+void
+save_mesh_data(
+    const char * path,
+    const std::vector<VertexData> & vertex_data,
+    const std::vector<FaceData> & face_data
+) {
+    std::ofstream f(path, std::ios::binary);
+    f.clear();
+    VertexId num_vertices = vertex_data.size();
+    f.write(reinterpret_cast<const char *>(&num_vertices), sizeof(VertexId));
+    for (auto vertex : vertex_data) {
+        f.write(reinterpret_cast<const char *>(&vertex), sizeof(VertexData));
+    }
+    FaceId num_faces = face_data.size();
+    f.write(reinterpret_cast<const char *>(&num_faces), sizeof(FaceId));
+    for (auto face : face_data) {
+        f.write(reinterpret_cast<const char *>(&face.m_vertex_ids[0]), sizeof(VertexId));
+        f.write(reinterpret_cast<const char *>(&face.m_vertex_ids[1]), sizeof(VertexId));
+        f.write(reinterpret_cast<const char *>(&face.m_vertex_ids[2]), sizeof(VertexId));
+    }
+}
+
+void
+load_mesh_data(
+    const char * path,
+    std::vector<VertexData> & vertex_data,
+    std::vector<FaceData> & face_data
+) {
+    vertex_data.clear();
+    face_data.clear();
+    std::ifstream f(path, std::ios::binary);
+    VertexId num_vertices;
+    f.read(reinterpret_cast<char *>(&num_vertices), sizeof(VertexId));
+    std::cout << num_vertices << std::endl;
+    vertex_data.resize(num_vertices);
+    for (VertexId vertex_id = 0; vertex_id < num_vertices; ++vertex_id) {
+        f.read(reinterpret_cast<char *>(&vertex_data.data()[vertex_id]), sizeof(VertexData));
+    }
+    FaceId num_faces;
+    f.read(reinterpret_cast<char *>(&num_faces), sizeof(FaceId));
+    std::cout << num_faces << std::endl;
+    face_data.resize(num_faces);
+    for (FaceId face_id = 0; face_id < num_faces; ++face_id) {
+        f.read(reinterpret_cast<char *>(&face_data.data()[face_id].m_vertex_ids[0]), sizeof(VertexId));
+        f.read(reinterpret_cast<char *>(&face_data.data()[face_id].m_vertex_ids[1]), sizeof(VertexId));
+        f.read(reinterpret_cast<char *>(&face_data.data()[face_id].m_vertex_ids[2]), sizeof(VertexId));
+    }
+}
+
 void render_mesh(SDL_Renderer * renderer, const Mesh & mesh) {
     for (FaceId face_id = 0; face_id < mesh.get_num_faces(); ++face_id) {
         const Face & face = mesh.get_face_by_id(face_id);
@@ -121,8 +170,17 @@ int main() {
     SDL_RenderClear(renderer);
 
     
+    std::vector<VertexData> vertex_data;
+    std::vector<FaceData> face_data;
+    load_mesh_data("example.map", vertex_data, face_data);
+
     Mesh mesh;
-    mesh.load("example.map");
+    mesh.import(
+        vertex_data.data(),
+        vertex_data.size(),
+        face_data.data(),
+        face_data.size()
+    );
 
     std::vector<VertexId> vertex_ids;
 

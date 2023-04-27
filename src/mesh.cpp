@@ -1,5 +1,39 @@
 #include "nav/mesh.hpp"
 
+void
+Mesh::import(
+    const VertexData * vertices,
+    size_t num_vertices,
+    const FaceData * faces,
+    size_t num_faces
+) {
+    assert(num_vertices <= UINT16_MAX);
+    m_vertices.clear();
+    m_vertices.reserve(num_vertices);
+    for (size_t vertex_id = 0; vertex_id < num_vertices; ++vertex_id) {
+        const VertexData & vertex_data = vertices[vertex_id];
+        Vertex vertex;
+        vertex.m_pos.m_x = vertex_data.m_x;
+        vertex.m_pos.m_y = vertex_data.m_y;
+        m_vertices.push_back(vertex);
+    }
+    assert(num_vertices <= UINT16_MAX);
+    m_faces.clear();
+    m_faces.reserve(num_faces);
+    for (size_t face_id = 0; face_id < num_faces; ++face_id) {
+        const FaceData & face_data = faces[face_id];
+        Face face;
+        face.m_vertex_ids[0] = face_data.m_vertex_ids[0];
+        face.m_vertex_ids[1] = face_data.m_vertex_ids[1];
+        face.m_vertex_ids[2] = face_data.m_vertex_ids[2];
+        face.m_adj_ids[0] = FACE_ID_NONE;
+        face.m_adj_ids[1] = FACE_ID_NONE;
+        face.m_adj_ids[2] = FACE_ID_NONE;
+        m_faces.push_back(face);
+    }
+    connect();
+}
+
 bool
 Mesh::point_is_inside_face(
     const Face & face,
@@ -157,55 +191,3 @@ Mesh::add_vertex(
     m_vertices.push_back(vertex);
     return vertex_id;
 }
-
-void
-Mesh::save(
-    const char * path 
-) const {
-    std::ofstream f(path, std::ios::binary);
-    f.clear();
-    VertexId num_vertices = m_vertices.size();
-    f.write(reinterpret_cast<const char *>(&num_vertices), sizeof(VertexId));
-    for (auto vertex : m_vertices) {
-        f.write(reinterpret_cast<const char *>(&vertex), sizeof(Vertex));
-    }
-    FaceId num_faces = m_faces.size();
-    f.write(reinterpret_cast<const char *>(&num_faces), sizeof(FaceId));
-    for (auto face : m_faces) {
-        f.write(reinterpret_cast<const char *>(&face.m_vertex_ids[0]), sizeof(VertexId));
-        f.write(reinterpret_cast<const char *>(&face.m_vertex_ids[1]), sizeof(VertexId));
-        f.write(reinterpret_cast<const char *>(&face.m_vertex_ids[2]), sizeof(VertexId));
-    }
-}
-
-void
-Mesh::load(
-    const char * path 
-) {
-    m_vertices.clear();
-    m_faces.clear();
-    std::ifstream f(path, std::ios::binary);
-    VertexId num_vertices;
-    f.read(reinterpret_cast<char *>(&num_vertices), sizeof(VertexId));
-    std::cout << num_vertices << std::endl;
-    m_vertices.resize(num_vertices);
-    for (VertexId vertex_id = 0; vertex_id < num_vertices; ++vertex_id) {
-        f.read(reinterpret_cast<char *>(&m_vertices.data()[vertex_id]), sizeof(Vertex));
-    }
-    FaceId num_faces;
-    f.read(reinterpret_cast<char *>(&num_faces), sizeof(FaceId));
-    std::cout << num_faces << std::endl;
-    m_faces.resize(num_faces);
-    for (auto & face : m_faces) {
-        face.m_adj_ids[0] = FACE_ID_NONE;
-        face.m_adj_ids[1] = FACE_ID_NONE;
-        face.m_adj_ids[2] = FACE_ID_NONE;
-    }
-    for (FaceId face_id = 0; face_id < num_faces; ++face_id) {
-        f.read(reinterpret_cast<char *>(&m_faces.data()[face_id].m_vertex_ids[0]), sizeof(VertexId));
-        f.read(reinterpret_cast<char *>(&m_faces.data()[face_id].m_vertex_ids[1]), sizeof(VertexId));
-        f.read(reinterpret_cast<char *>(&m_faces.data()[face_id].m_vertex_ids[2]), sizeof(VertexId));
-    }
-    connect();
-}
-

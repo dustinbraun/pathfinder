@@ -8,12 +8,21 @@
 #include <vector>
 
 #include "face.hpp"
+#include "face_data.hpp"
 #include "point.hpp"
 #include "vertex.hpp"
-
+#include "vertex_data.hpp"
 
 class Mesh {
 public:
+    void
+    import(
+        const VertexData * vertices,
+        size_t num_vertices,
+        const FaceData * faces,
+        size_t num_faces
+    );
+
     bool
     point_is_inside_face(
         const Face & face,
@@ -105,16 +114,6 @@ public:
     add_vertex(
         float x,
         float y
-    );
-
-    void
-    save(
-        const char * path 
-    ) const;
-
-    void
-    load(
-        const char * path 
     );
 
 private:
