@@ -14,6 +14,10 @@ public:
 
     }
 
+    ~NodeQueue() {
+        delete[] m_nodes;
+    }
+
     void clear() {
         m_size = 0;
     }

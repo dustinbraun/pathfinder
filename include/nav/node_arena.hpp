@@ -45,6 +45,11 @@ public:
         }
     }
 
+    ~NodeArena() {
+        delete[] m_nodes;
+        delete[] m_node_indices;
+    }
+
     void
     clear() {
         for (size_t i = 0; i < m_capacity*2; ++i) {
