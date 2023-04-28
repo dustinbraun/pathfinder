@@ -2,6 +2,8 @@
 #ifndef NAV__POINT__HPP
 #define NAV__POINT__HPP
 
+#include <cmath>
+
 class Point {
 public:
     float m_x;
@@ -37,6 +39,13 @@ public:
         float dx = m_x - other.m_x;
         float dy = m_y - other.m_y;
         return dx*dx + dy*dy;
+    }
+
+    float
+    get_distance(
+        const Point & other
+    ) const {
+        return sqrtf(get_square_distance(other));
     }
 };
 
