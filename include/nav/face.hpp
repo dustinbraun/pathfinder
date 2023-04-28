@@ -58,6 +58,22 @@ public:
         }
         return false;
     }
+
+    size_t
+    get_edge_index_by_adj_id(
+        FaceId adj_id
+    ) const {
+        if (m_adj_ids[0] == adj_id) {
+            return 0;
+        }
+        if (m_adj_ids[1] == adj_id) {
+            return 1;
+        }
+        if (m_adj_ids[2] == adj_id) {
+            return 2;
+        }
+        assert(false);
+    }
 };
 
 #endif

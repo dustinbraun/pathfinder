@@ -86,25 +86,28 @@ public:
     ) : m_node_mapping(new NodeMapping[mesh.get_num_faces()]), m_num_mappings(mesh.get_num_faces()), m_salt(1) {
         clear();
         for (size_t face_id = 0; face_id < mesh.get_num_faces(); ++face_id) {
-            m_node_mapping[face_id].m_node_indices[0] = FACE_ID_NONE;
-            m_node_mapping[face_id].m_node_indices[1] = FACE_ID_NONE;
-            m_node_mapping[face_id].m_node_indices[2] = FACE_ID_NONE;
-        }
-        std::unordered_map<uint32_t, uint16_t> map(mesh.get_num_faces()*2);
-        for (size_t face_id = 0; face_id < mesh.get_num_faces(); ++face_id) {
             const Face & face = mesh.get_face_by_id(face_id);
             for (size_t edge_index = 0; edge_index < 3; ++edge_index) {
                 FaceId adj_id = face.m_adj_ids[edge_index];
-                if (adj_id != FACE_ID_NONE) {
-                    auto map_iter = map.find(get_key(face_id, adj_id));
-                    if (map_iter == map.end()) {
-                        m_node_mapping[face_id].m_node_indices[edge_index] = m_nodes.size();
-                        map[get_key(face_id, adj_id)] = m_nodes.size();
-                        NodeEx node;
-                        m_nodes.push_back(node);
+                if (adj_id == FACE_ID_NONE) {
+                    // There is no adjacent face on this edge, so there is no mapping.
+                    m_node_mapping[face_id].m_node_indices[edge_index] = FACE_ID_NONE;
+                }
+                else {
+                    if (adj_id < face_id) {
+                        // The adjacent face has a lower id than the current face, this
+                        // means the edge node was already added.
+                        // We take the node index from the entry of the adjacent face so that
+                        // both faces point to the same node.
+                        // Remember, faces have the same node on shared edged.
+                        m_node_mapping[face_id].m_node_indices[edge_index] = m_node_mapping[adj_id].m_node_indices[mesh.get_face_by_id(adj_id).get_edge_index_by_adj_id(face_id)];
                     }
                     else {
-                        m_node_mapping[face_id].m_node_indices[edge_index] = map_iter->second;
+                        // The current face has a lower id than the adjacent face, this
+                        // means the edge node does not exist yet.
+                        m_node_mapping[face_id].m_node_indices[edge_index] = static_cast<uint16_t>(m_nodes.size());
+                        NodeEx node;
+                        m_nodes.push_back(node);
                     }
                 }
             }
