@@ -27,7 +27,6 @@ public:
                 NodeEx & node = m_node_arena.get_node(start_face_id, edge_index);
                 node.m_prev_face_id = start_face_id;
                 node.m_next_face_id = next_face_id;
-                node.m_position = m_mesh.get_edge_center_point(start_face, edge_index);
                 node.m_g = start_position.get_distance(node.m_position);
                 node.m_f = node.m_g + node.m_position.get_distance(end_position);
                 node.m_parent_node = nullptr;
@@ -100,7 +99,6 @@ private:
                         // New node.
                         next_node.m_prev_face_id = prev_face_id;
                         next_node.m_next_face_id = next_face_id;
-                        next_node.m_position = m_mesh.get_edge_center_point(m_mesh.get_face_by_id(prev_face_id), edge_index);
                         next_node.m_g = node.m_g + node.m_position.get_distance(next_node.m_position);
                         next_node.m_f = next_node.m_g + next_node.m_position.get_distance(end_position);
                         next_node.m_parent_node = &node;
