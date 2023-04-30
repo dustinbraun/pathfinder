@@ -12,7 +12,7 @@ public:
     uint16_t m_node_index;
 };
 
-// This NodeArena is implemented using linear-probing and keeps a salt-value
+// This NodeArena is implemented using linear-probing hash-map and keeps a salt-value
 // to check when a node was created.
 // Instead of resetting all buckets with O(n) complexity, we just increment
 // the salt value with O(1) complexity.
@@ -51,7 +51,8 @@ public:
         return m_nodes;
     }
 
-    void clear() {
+    void
+    clear() {
         if (m_salt == UINT16_MAX) {
             m_salt = 1;
             for (uint32_t i = 0; i < m_bucket_count; ++i) {
@@ -118,7 +119,9 @@ private:
 
     static
     uint32_t
-    compute_hash(NodeId node_id) {
+    compute_hash(
+        NodeId node_id
+    ) {
         // Must be order-independent because there is the same node
         // independet of the direction of edge traversal.
         return node_id.m_prev_face_id ^ node_id.m_next_face_id;
