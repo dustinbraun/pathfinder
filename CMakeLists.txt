@@ -6,9 +6,9 @@ find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIRS})
 
 
-add_library(pathfinder STATIC src/mesh.cpp src/node_arena.cpp src/query.cpp)
+add_library(pathfinder INTERFACE)
 
-target_include_directories(pathfinder PUBLIC include)
+target_include_directories(pathfinder INTERFACE include)
 
 add_executable(main src/main.cpp)
 

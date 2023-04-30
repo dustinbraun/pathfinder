@@ -1,6 +1,7 @@
 #include <cstdint>
 #include <vector>
 #include <iostream>
+#include <fstream>
 
 constexpr int WINDOW_W = 800;
 constexpr int WINDOW_H = 800;
