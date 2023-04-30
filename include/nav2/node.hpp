@@ -13,6 +13,10 @@ public:
     FaceId m_prev_face_id;
     FaceId m_next_face_id;
 
+    NodeId() {
+
+    }
+
     NodeId(
         FaceId prev_face_id,
         FaceId next_face_id
@@ -46,9 +50,7 @@ public:
 
 class Node {
 public:
-    FaceId m_prev_face;
-    FaceId m_next_face;
-    EdgeLocation m_edge_location;
+    NodeId m_id;
     NodeState m_state;
 };
 

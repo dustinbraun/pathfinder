@@ -51,7 +51,7 @@ public:
         }
         while (!m_node_queue.is_empty()) {
             Node & node = m_node_queue.pop_node();
-            if (node.m_next_face == end_face_id) {
+            if (node.m_id.m_next_face_id == end_face_id) {
                 return generate_path(node);
             }
             node.m_state.m_is_open = false;
@@ -89,9 +89,9 @@ private:
         Point end_pos
     ) {
         for (size_t edge_index = 0; edge_index < 3; ++edge_index) {
-            FaceId next_face_id = mesh.get_face_by_id(node.m_next_face).m_adj_ids[edge_index];
+            FaceId next_face_id = mesh.get_face_by_id(node.m_id.m_next_face_id).m_adj_ids[edge_index];
             if (next_face_id != FACE_ID_NONE) {
-                Node * next_node = m_node_arena.get_node(node.m_next_face, next_face_id);
+                Node * next_node = m_node_arena.get_node(node.m_id.m_next_face_id, next_face_id);
                 if (next_node != nullptr && !next_node->m_state.m_is_closed) {
                     if (next_node->m_state.m_is_open) {
                         float g = node.m_state.m_g + compute_distance(node.m_state.m_pos, next_node->m_state.m_pos);
@@ -103,7 +103,7 @@ private:
                         }
                     }
                     else {
-                        next_node->m_state.m_pos = mesh.get_edge_center_point(mesh.get_face_by_id(node.m_next_face), edge_index);
+                        next_node->m_state.m_pos = mesh.get_edge_center_point(mesh.get_face_by_id(node.m_id.m_next_face_id), edge_index);
                         next_node->m_state.m_g = node.m_state.m_g + compute_distance(node.m_state.m_pos, next_node->m_state.m_pos);;
                         next_node->m_state.m_f = next_node->m_state.m_g + compute_distance(next_node->m_state.m_pos, end_pos);
                         next_node->m_state.m_parent_node = &node;
@@ -124,9 +124,9 @@ private:
     ) {
         std::vector<FaceId> path;
         const Node * iter = &node;
-        path.push_back(iter->m_next_face);
+        path.push_back(iter->m_id.m_next_face_id);
         do {
-            path.push_back(iter->m_prev_face);
+            path.push_back(iter->m_id.m_prev_face_id);
             iter = iter->m_state.m_parent_node;
         } while (iter != nullptr);
         return path;

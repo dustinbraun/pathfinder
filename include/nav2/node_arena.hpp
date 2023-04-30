@@ -67,7 +67,7 @@ public:
         uint32_t bucket_index = hash % m_bucket_count;
         while (m_buckets[bucket_index].m_salt == m_salt) {
             Node & node = m_nodes[m_buckets[bucket_index].m_node_index];
-            if (NodeId(node.m_prev_face, node.m_next_face) == node_id) {
+            if (node.m_id == node_id) {
                 return &node;
             }
             bucket_index++;
@@ -82,8 +82,8 @@ public:
         bucket.m_salt = m_salt;
         bucket.m_node_index = m_size;
         Node & node = m_nodes[m_size];
-        node.m_prev_face = prev_face_id;
-        node.m_next_face = next_face_id;
+        node.m_id.m_prev_face_id = prev_face_id;
+        node.m_id.m_next_face_id = next_face_id;
         node.m_state.m_pos.m_x = 0.0f;
         node.m_state.m_pos.m_y = 0.0f;
         node.m_state.m_is_open = false;
