@@ -2,6 +2,8 @@
 
 #include <nav/node_arena.hpp>
 
+using namespace nav2;
+
 int main() {
     NodeArena node_arena(4);
     assert(node_arena.get_size() == 0);

@@ -6,6 +6,8 @@
 
 #include "node.hpp"
 
+namespace nav2 {
+
 class NodeQueue {
 public:
     NodeQueue(
@@ -135,3 +137,5 @@ private:
         }
     }
 };
+
+} // namespace nav2

@@ -1,11 +1,11 @@
 #pragma once
-#ifndef NAV__FACE__HPP
-#define NAV__FACE__HPP
 
 #include <cstdint>
 
 #include "face_id.hpp"
 #include "vertex_id.hpp"
+
+namespace nav2 {
 
 class Face {
 public:
@@ -76,4 +76,4 @@ public:
     }
 };
 
-#endif
+} // namespace nav2

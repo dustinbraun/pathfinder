@@ -4,6 +4,8 @@
 #include "point.hpp"
 #include "edge_location.hpp"
 
+namespace nav2 {
+
 class Node;
 
 class NodeState {
@@ -23,3 +25,5 @@ public:
     EdgeLocation m_edge_location;
     NodeState m_state;
 };
+
+} // namespace nav2

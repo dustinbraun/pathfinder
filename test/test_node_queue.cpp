@@ -2,6 +2,8 @@
 
 #include <nav/node_queue.hpp>
 
+using namespace nav2;
+
 int main() {
     NodeQueue queue(128);
     assert(queue.is_empty());

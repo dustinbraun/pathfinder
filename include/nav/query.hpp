@@ -1,6 +1,4 @@
 #pragma once
-#ifndef NAV__QUERY__HPP
-#define NAV__QUERY__HPP
 
 #include <cmath>
 #include <functional>
@@ -8,6 +6,8 @@
 #include "mesh.hpp"
 #include "node_arena.hpp"
 #include "node_queue.hpp"
+
+namespace nav2 {
 
 class Query {
 public:
@@ -135,4 +135,4 @@ private:
     }
 };
 
-#endif
+} // namespace nav2

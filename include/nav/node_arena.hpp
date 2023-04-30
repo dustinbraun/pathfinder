@@ -4,6 +4,8 @@
 
 #include "node.hpp"
 
+namespace nav2 {
+
 class NodeId {
 public:
     FaceId m_min_face_id;
@@ -145,3 +147,5 @@ private:
         return node_id.m_min_face_id ^ node_id.m_max_face_id ^ static_cast<uint32_t>(node_id.m_edge_location);
     }
 };
+
+} // namespace nav2

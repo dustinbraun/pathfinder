@@ -1,8 +1,8 @@
 #pragma once
-#ifndef NAV__POINT__HPP
-#define NAV__POINT__HPP
 
 #include <cmath>
+
+namespace nav2 {
 
 class Point {
 public:
@@ -49,4 +49,4 @@ public:
     }
 };
 
-#endif
+} // namespace nav2

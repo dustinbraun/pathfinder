@@ -10,7 +10,7 @@ constexpr int WINDOW_H = 800;
 
 #include <SDL2/SDL.h>
 
-
+using namespace nav2;
 
 void
 save_mesh_data(

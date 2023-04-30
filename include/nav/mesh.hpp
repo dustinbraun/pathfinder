@@ -1,6 +1,4 @@
 #pragma once
-#ifndef NAV__MESH__HPP
-#define NAV__MESH__HPP
 
 #include <cassert>
 #include <vector>
@@ -11,6 +9,8 @@
 #include "point.hpp"
 #include "vertex.hpp"
 #include "vertex_data.hpp"
+
+namespace nav2 {
 
 class Mesh {
 public:
@@ -268,4 +268,4 @@ private:
 
 };
 
-#endif
+} // namespace nav2

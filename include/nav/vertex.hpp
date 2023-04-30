@@ -1,14 +1,14 @@
 #pragma once
-#ifndef NAV__VERTEX__HPP
-#define NAV__VERTEX__HPP
 
 #include <cstdint>
 
 #include "point.hpp"
+
+namespace nav2 {
 
 class Vertex {
 public:
     Point m_pos;
 };
 
-#endif
+} // namespace nav2
