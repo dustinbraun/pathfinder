@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cassert>
+#include <iostream>
 #include <vector>
 
 #include "edge_location.hpp"
@@ -74,6 +75,24 @@ public:
             m_faces.push_back(face);
         }
         connect_faces();
+    }
+
+    // For unit-test/bench data generation
+    void
+    export_cpp() {
+        std::cout << "uint16_t vertex_count = " << m_vertices.size() << ";" << std::endl;
+        std::cout << "VertexData vertices[] = {" << std::endl;
+        for (auto vertex : m_vertices) {
+            std::cout << "    { " << vertex.m_pos.m_x << ", " << vertex.m_pos.m_y << ", }," << std::endl;
+        }
+        std::cout << "};" << std::endl;
+
+        std::cout << "uint16_t face_count = " << m_faces.size() << ";" << std::endl;
+        std::cout << "FaceData faces[] = {" << std::endl;
+        for (auto face : m_faces) {
+            std::cout << "    { " << face.m_vertex_ids[0] << ", " << face.m_vertex_ids[1] << ", " << face.m_vertex_ids[2] << ", }," << std::endl;
+        }
+        std::cout << "};" << std::endl;
     }
 
     bool

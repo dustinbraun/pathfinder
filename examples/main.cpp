@@ -10,7 +10,11 @@ constexpr int WINDOW_H = 800;
 
 #include <SDL2/SDL.h>
 
+
+
 using namespace nav2;
+
+
 
 void
 save_mesh_data(
@@ -146,6 +150,8 @@ void render_node_arena(SDL_Renderer * renderer, const Mesh & mesh, const NodeAre
     }
 }
 
+
+
 void render_debug(SDL_Renderer * renderer, const Mesh & mesh, const NodeArena & node_arena) {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
     SDL_RenderClear(renderer);
@@ -155,7 +161,6 @@ void render_debug(SDL_Renderer * renderer, const Mesh & mesh, const NodeArena & 
 
     SDL_RenderPresent(renderer);
 }
-
 
 int main() {
 
@@ -191,6 +196,8 @@ int main() {
         face_data.data(),
         face_data.size()
     );
+
+    mesh.export_cpp();
 
     Point start_pos = Point(0.0f, 0.0f);
     FaceId start_face_id = 0;
@@ -252,6 +259,11 @@ int main() {
 
                     }
                 }
+
+
+                std::cout << "start: " << start_face_id << "; " << start_pos.m_x << " " << start_pos.m_y << std::endl;
+                std::cout << "end: " << end_face_id << "; " << end_pos.m_x << " " << end_pos.m_y << std::endl;
+
             }
         }
 
