@@ -6,43 +6,6 @@
 
 namespace nav2 {
 
-class NodeId {
-public:
-    FaceId m_min_face_id;
-    FaceId m_max_face_id;
-
-    EdgeLocation m_edge_location;
-
-    NodeId(
-        FaceId face_id_a,
-        FaceId face_id_b,
-        EdgeLocation edge_location
-    ) : m_edge_location(edge_location) {
-        if (face_id_a <= face_id_b) {
-            m_min_face_id = face_id_a;
-            m_max_face_id = face_id_b;
-        }
-        else {
-            m_min_face_id = face_id_b;
-            m_max_face_id = face_id_a;
-        }
-    }
-
-    bool
-    operator == (
-        const NodeId& rhs
-    ) const {
-        return (m_min_face_id == rhs.m_min_face_id) && (m_max_face_id == rhs.m_max_face_id) && (m_edge_location == rhs.m_edge_location);
-    }
-
-    bool
-    operator != (
-        const NodeId& rhs
-    ) const {
-        return (m_min_face_id != rhs.m_min_face_id) || (m_max_face_id != rhs.m_max_face_id) || (m_edge_location != rhs.m_edge_location);
-    }
-};
-
 class NodeArenaBucket {
 public:
     uint16_t m_salt; // Indicates when the bucket was created.
@@ -97,15 +60,14 @@ public:
     Node *
     get_node(
         uint16_t prev_face_id,
-        uint16_t next_face_id,
-        EdgeLocation edge_location = EdgeLocation::MIDDLE
+        uint16_t next_face_id
     ) {
-        NodeId node_id(prev_face_id, next_face_id, edge_location);
+        NodeId node_id(prev_face_id, next_face_id);
         uint32_t hash = compute_hash(node_id);
         uint32_t bucket_index = hash % m_bucket_count;
         while (m_buckets[bucket_index].m_salt == m_salt) {
             Node & node = m_nodes[m_buckets[bucket_index].m_node_index];
-            if (NodeId(node.m_prev_face, node.m_next_face, node.m_edge_location) == node_id) {
+            if (NodeId(node.m_prev_face, node.m_next_face) == node_id) {
                 return &node;
             }
             bucket_index++;
@@ -122,7 +84,6 @@ public:
         Node & node = m_nodes[m_size];
         node.m_prev_face = prev_face_id;
         node.m_next_face = next_face_id;
-        node.m_edge_location = edge_location;
         node.m_state.m_pos.m_x = 0.0f;
         node.m_state.m_pos.m_y = 0.0f;
         node.m_state.m_is_open = false;
@@ -149,7 +110,7 @@ private:
 
 
     uint32_t compute_hash(NodeId node_id) {
-        return node_id.m_min_face_id ^ node_id.m_max_face_id ^ static_cast<uint32_t>(node_id.m_edge_location);
+        return node_id.m_prev_face_id ^ node_id.m_next_face_id;
     }
 };
 
