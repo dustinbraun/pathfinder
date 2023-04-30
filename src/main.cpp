@@ -6,7 +6,7 @@
 constexpr int WINDOW_W = 800;
 constexpr int WINDOW_H = 800;
 
-#include <nav/query.hpp>
+#include <nav2/query.hpp>
 
 #include <SDL2/SDL.h>
 

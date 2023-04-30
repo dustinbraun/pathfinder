@@ -1,10 +1,3 @@
-# add_executable(test_enqueued_node test_enqueued_node.cpp)
-# target_link_libraries(test_enqueued_node PRIVATE nav)
-
-# add_executable(test_dequeued_node test_enqueued_node.cpp)
-# target_link_libraries(test_dequeued_node PRIVATE nav)
-
-
 # Test NodeArena
 add_executable(
     test_node_arena
@@ -14,8 +7,10 @@ add_executable(
 target_link_libraries(
     test_node_arena
     PRIVATE
-    pathfinder
+    nav2
 )
+
+add_test(NAME test_node_arena COMMAND test_node_arena)
 
 # Test NodeQueue
 add_executable(
@@ -26,5 +21,7 @@ add_executable(
 target_link_libraries(
     test_node_queue
     PRIVATE
-    pathfinder
+    nav2
 )
+
+add_test(NAME test_node_queue COMMAND test_node_queue)

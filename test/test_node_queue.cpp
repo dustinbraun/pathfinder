@@ -1,6 +1,6 @@
 #include <cassert>
 
-#include <nav/node_queue.hpp>
+#include <nav2/node_queue.hpp>
 
 using namespace nav2;
 
@@ -46,4 +46,6 @@ int main() {
     assert(queue.pop_node().m_state.m_f == 9.0f);
     assert(queue.is_empty());
     assert(queue.get_size() == 0);
+
+    return 0;
 }

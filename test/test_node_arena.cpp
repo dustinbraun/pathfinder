@@ -1,6 +1,6 @@
 #include <cassert>
 
-#include <nav/node_arena.hpp>
+#include <nav2/node_arena.hpp>
 
 using namespace nav2;
 
@@ -125,4 +125,6 @@ int main() {
         assert(node->m_state.m_f == 0.0f);
         assert(node->m_state.m_parent_node == nullptr);
     }
+
+    return 0;
 }
