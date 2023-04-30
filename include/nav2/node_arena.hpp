@@ -12,12 +12,15 @@ public:
     uint16_t m_node_index;
 };
 
-// This NodeArena keeps a salt-value to check when a node was created.
+// This NodeArena is implemented using linear-probing and keeps a salt-value
+// to check when a node was created.
 // Instead of resetting all buckets with O(n) complexity, we just increment
 // the salt value with O(1) complexity.
 class NodeArena {
 public:
-    NodeArena(uint16_t capacity) : m_salt(1), m_capacity(capacity), m_size(0), m_bucket_count(capacity*2), m_buckets(new NodeArenaBucket[m_bucket_count]), m_nodes(new Node[capacity]) {
+    NodeArena(
+        uint16_t capacity
+    ) : m_salt(1), m_capacity(capacity), m_size(0), m_bucket_count(capacity*2), m_buckets(new NodeArenaBucket[m_bucket_count]), m_nodes(new Node[capacity]) {
         for (uint32_t i = 0; i < m_bucket_count; ++i) {
             m_buckets[i].m_salt = 0;
         }
@@ -28,19 +31,23 @@ public:
         delete[] m_nodes;
     }
 
-    uint16_t get_capacity() const {
+    uint16_t
+    get_capacity() const {
         return m_capacity;
     }
 
-    uint16_t get_size() const {
+    uint16_t
+    get_size() const {
         return m_size;
     }
 
-    bool is_empty() const {
+    bool
+    is_empty() const {
         return m_size == 0;
     }
 
-    const Node * get_nodes() const {
+    const Node *
+    get_nodes() const {
         return m_nodes;
     }
 
@@ -109,7 +116,11 @@ private:
     Node * m_nodes;
 
 
-    uint32_t compute_hash(NodeId node_id) {
+    static
+    uint32_t
+    compute_hash(NodeId node_id) {
+        // Must be order-independent because there is the same node
+        // independet of the direction of edge traversal.
         return node_id.m_prev_face_id ^ node_id.m_next_face_id;
     }
 };
