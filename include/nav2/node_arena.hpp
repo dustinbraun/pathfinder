@@ -13,10 +13,12 @@ public:
     uint16_t m_node_index;
 };
 
-// This NodeArena is implemented using linear-probing hash-map and keeps a salt-value
+// This NodeArena is implemented using a linear-probing hash-map which keeps a salt-value
 // to check when a node was created.
 // Instead of resetting all buckets with O(n) complexity, we just increment
 // the salt value with O(1) complexity.
+// A good clear() performance is necessary because the arena (or hash-map) is
+// cleared before each search query.
 class NodeArena {
 public:
     NodeArena(
