@@ -59,6 +59,32 @@ Query::expand_node(
         FaceId next_face_id = mesh.get_face_by_id(node.m_next_face).m_adj_ids[edge_index];
         if (next_face_id != FACE_ID_NONE) {
             for (size_t edge_location = 0; edge_location < 3; ++edge_location) {
+                
+                // m_node_arena.insert_or_modify(node.m_next_face, next_face_id, static_cast<EdgeLocation>(edge_location),
+                //     [&] (Node & next_node) {
+                //         next_node.m_prev_face = node.m_next_face;
+                //         next_node.m_next_face = next_face_id;
+                //         next_node.m_edge_location = static_cast<EdgeLocation>(edge_location);
+                //         next_node.m_state.m_pos = mesh.get_point_of_edge_location(mesh.get_face_by_id(node.m_next_face), edge_index, static_cast<EdgeLocation>(edge_location));
+                //         next_node.m_state.m_g = node.m_state.m_g + compute_distance(node.m_state.m_pos, next_node.m_state.m_pos);;
+                //         next_node.m_state.m_f = next_node.m_state.m_g + compute_distance(next_node.m_state.m_pos, end_pos);
+                //         next_node.m_state.m_parent_node = &node;
+                //         next_node.m_state.m_is_open = true;
+                //         next_node.m_state.m_is_closed = false;
+                //         next_node.m_state.m_parent_node = &node;
+                //         m_node_queue.insert_node(&next_node);
+                //     },
+                //     [&] (Node & next_node) {
+                //         float g = node.m_state.m_g + compute_distance(node.m_state.m_pos, next_node.m_state.m_pos);
+                //         if (g < next_node.m_state.m_g) {
+                //             next_node.m_state.m_g = g;
+                //             next_node.m_state.m_f = g + compute_distance(next_node.m_state.m_pos, end_pos);
+                //             next_node.m_state.m_parent_node = &node;
+                //             m_node_queue.modify_node(next_node);
+                //         }
+                //     }
+                // );
+
                 Node * next_node = m_node_arena.get_node(node.m_next_face, next_face_id, static_cast<EdgeLocation>(edge_location));
                 if (next_node != nullptr && !next_node->m_state.m_is_closed) {
                     if (next_node->m_state.m_is_open) {

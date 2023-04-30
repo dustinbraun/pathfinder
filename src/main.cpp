@@ -10,7 +10,10 @@ constexpr int WINDOW_H = 800;
 
 #include <nav/query_ex.hpp>
 
+
 #include <SDL2/SDL.h>
+
+
 
 void
 save_mesh_data(
@@ -99,38 +102,38 @@ void render_path(SDL_Renderer * renderer, const Mesh & mesh, const std::vector<F
 void render_node_arena(SDL_Renderer * renderer, const Mesh & mesh, const NodeArena & node_arena) {
     for (size_t node_index = 0; node_index < node_arena.get_size(); ++node_index) {
         const Node & node = node_arena.get_nodes()[node_index];
-        SDL_Rect rect;
-        rect.x = node.m_state.m_pos.m_x - 3.0f;
-        rect.y = node.m_state.m_pos.m_y - 3.0f;
-        rect.w = 6;
-        rect.h = 6;
-        if (node.m_state.m_is_closed) {
-            SDL_SetRenderDrawColor(renderer, 0, 0, 255, SDL_ALPHA_OPAQUE);
-        }
-        else {
-            SDL_SetRenderDrawColor(renderer, 0, 255, 0, SDL_ALPHA_OPAQUE);
-        }
-        SDL_RenderDrawRect(renderer, &rect);
+        // SDL_Rect rect;
+        // rect.x = node.m_state.m_pos.m_x - 3.0f;
+        // rect.y = node.m_state.m_pos.m_y - 3.0f;
+        // rect.w = 6;
+        // rect.h = 6;
+        // if (node.m_state.m_is_closed) {
+        //     SDL_SetRenderDrawColor(renderer, 0, 0, 255, SDL_ALPHA_OPAQUE);
+        // }
+        // else {
+        //     SDL_SetRenderDrawColor(renderer, 0, 255, 0, SDL_ALPHA_OPAQUE);
+        // }
+        // SDL_RenderDrawRect(renderer, &rect);
 
-        Point prev_face_pos = mesh.get_face_center_point(mesh.get_face_by_id(node.m_prev_face));
-        SDL_SetRenderDrawColor(renderer, 0, 0, 255, SDL_ALPHA_OPAQUE);
-        SDL_RenderDrawLine(
-            renderer,
-            node.m_state.m_pos.m_x,
-            node.m_state.m_pos.m_y,
-            prev_face_pos.m_x,
-            prev_face_pos.m_y
-        );
+        // Point prev_face_pos = mesh.get_face_center_point(mesh.get_face_by_id(node.m_prev_face));
+        // SDL_SetRenderDrawColor(renderer, 0, 0, 255, SDL_ALPHA_OPAQUE);
+        // SDL_RenderDrawLine(
+        //     renderer,
+        //     node.m_state.m_pos.m_x,
+        //     node.m_state.m_pos.m_y,
+        //     prev_face_pos.m_x,
+        //     prev_face_pos.m_y
+        // );
 
-        Point next_face_pos = mesh.get_face_center_point(mesh.get_face_by_id(node.m_next_face));
-        SDL_SetRenderDrawColor(renderer, 0, 255, 0, SDL_ALPHA_OPAQUE);
-        SDL_RenderDrawLine(
-            renderer,
-            node.m_state.m_pos.m_x,
-            node.m_state.m_pos.m_y,
-            next_face_pos.m_x,
-            next_face_pos.m_y
-        );
+        // Point next_face_pos = mesh.get_face_center_point(mesh.get_face_by_id(node.m_next_face));
+        // SDL_SetRenderDrawColor(renderer, 0, 255, 0, SDL_ALPHA_OPAQUE);
+        // SDL_RenderDrawLine(
+        //     renderer,
+        //     node.m_state.m_pos.m_x,
+        //     node.m_state.m_pos.m_y,
+        //     next_face_pos.m_x,
+        //     next_face_pos.m_y
+        // );
 
         if (node.m_state.m_parent_node != nullptr) {
             Point parent_pos = node.m_state.m_parent_node->m_state.m_pos;
@@ -219,6 +222,8 @@ void render_debug_ex(SDL_Renderer * renderer, const Mesh & mesh, const NodeArena
 }
 
 int main() {
+
+
     SDL_Init(SDL_INIT_VIDEO);
 
     SDL_Window *window = SDL_CreateWindow(
@@ -261,11 +266,11 @@ int main() {
         SDL_Delay(50);
     });
 
-    QueryEx query2(mesh, [&] (const Mesh & mesh, const NodeArenaEx & node_arena) {
-        render_debug_ex(renderer, mesh, node_arena);
-        SDL_Delay(50);
-    });
-    query2.search(start_face_id, start_pos, end_face_id, end_pos);
+    // QueryEx query2(mesh, [&] (const Mesh & mesh, const NodeArenaEx & node_arena) {
+    //     render_debug_ex(renderer, mesh, node_arena);
+    //     SDL_Delay(50);
+    // });
+    // query2.search(start_face_id, start_pos, end_face_id, end_pos);
 
     std::vector<FaceId> path;
 
@@ -299,7 +304,7 @@ int main() {
                     if (new_start_face_id != FACE_ID_NONE) {
                         start_face_id = new_start_face_id;
                         start_pos = Point(x, y);
-                        path = query2.search(start_face_id, start_pos, end_face_id, end_pos);
+                        path = query.search(mesh, start_face_id, start_pos, end_face_id, end_pos);
                     }
                 }
                 if (event.button.button == SDL_BUTTON_RIGHT) {
@@ -307,7 +312,7 @@ int main() {
                     if (new_end_face_id != FACE_ID_NONE) {
                         end_face_id = new_end_face_id;
                         end_pos = Point(x, y);
-                        path = query2.search(start_face_id, start_pos, end_face_id, end_pos);
+                        path = query.search(mesh, start_face_id, start_pos, end_face_id, end_pos);
 
                     }
                 }

@@ -18,7 +18,6 @@ public:
             std::vector<FaceId> path;
             path.push_back(end_face_id);
             return path;
-            
         }
         const Face & start_face = m_mesh.get_face_by_id(start_face_id);
         for (size_t edge_index = 0; edge_index < 3; ++edge_index) {
@@ -96,7 +95,9 @@ private:
                         }
                     }
                     else {
-                        // New node.
+                        // The not is neither visited nor enqueued,
+                        // This means it is a new node which must be initialized
+                        // and added to the queue.
                         next_node.m_prev_face_id = prev_face_id;
                         next_node.m_next_face_id = next_face_id;
                         next_node.m_g = node.m_g + node.m_position.get_distance(next_node.m_position);
