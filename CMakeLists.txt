@@ -9,5 +9,7 @@ target_include_directories(nav2 INTERFACE include)
 enable_testing()
 add_subdirectory(test)
 
+add_subdirectory(benches)
+
 # uncomment this to build examples
 add_subdirectory(examples)

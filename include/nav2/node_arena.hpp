@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <cstring>
 
 #include "node.hpp"
 
@@ -21,9 +22,10 @@ public:
     NodeArena(
         uint16_t capacity
     ) : m_salt(1), m_capacity(capacity), m_size(0), m_bucket_count(capacity*2), m_buckets(new NodeArenaBucket[m_bucket_count]), m_nodes(new Node[capacity]) {
-        for (uint32_t i = 0; i < m_bucket_count; ++i) {
-            m_buckets[i].m_salt = 0;
-        }
+        // for (uint32_t i = 0; i < m_bucket_count; ++i) {
+        //     m_buckets[i].m_salt = 0;
+        // }
+        std::memset(m_buckets, 0x00, sizeof(NodeArenaBucket)*m_bucket_count);
     }
 
     ~NodeArena() {
@@ -55,9 +57,10 @@ public:
     clear() {
         if (m_salt == UINT16_MAX) {
             m_salt = 1;
-            for (uint32_t i = 0; i < m_bucket_count; ++i) {
-                m_buckets[i].m_salt = 0;
-            }
+            // for (uint32_t i = 0; i < m_bucket_count; ++i) {
+            //     m_buckets[i].m_salt = 0;
+            // }
+            std::memset(m_buckets, 0x00, sizeof(NodeArenaBucket)*m_bucket_count);
         }
         else {
             m_salt++;
