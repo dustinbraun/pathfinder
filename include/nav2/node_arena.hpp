@@ -60,6 +60,11 @@ public:
         }
     }
 
+    ~NodeArena() {
+        delete[] m_buckets;
+        delete[] m_nodes;
+    }
+
     uint16_t get_capacity() const {
         return m_capacity;
     }
