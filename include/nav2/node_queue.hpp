@@ -41,13 +41,12 @@ public:
         if (m_size == m_capacity) {
             return;
         }
-        // assert(m_size != m_capacity);
         size_t current_index = m_size;
         m_size++;
         m_nodes[current_index] = node;
-        while (current_index != 0 && m_nodes[get_parent_index(current_index)]->m_state.m_f > m_nodes[current_index]->m_state.m_f) {
-            std::swap(m_nodes[get_parent_index(current_index)], m_nodes[current_index]);
-            current_index = get_parent_index(current_index);
+        while (current_index != 0 && m_nodes[parent(current_index)]->m_state.m_f > m_nodes[current_index]->m_state.m_f) {
+            std::swap(m_nodes[parent(current_index)], m_nodes[current_index]);
+            current_index = parent(current_index);
         }
     }
 
@@ -61,9 +60,9 @@ public:
             assert(current_index < m_size);
             current_index++;
         }
-        while (current_index != 0 && m_nodes[get_parent_index(current_index)]->m_state.m_f > m_nodes[current_index]->m_state.m_f) {
-            std::swap(m_nodes[get_parent_index(current_index)], m_nodes[current_index]);
-            current_index = get_parent_index(current_index);
+        while (current_index != 0 && m_nodes[parent(current_index)]->m_state.m_f > m_nodes[current_index]->m_state.m_f) {
+            std::swap(m_nodes[parent(current_index)], m_nodes[current_index]);
+            current_index = parent(current_index);
         }
     }
 
@@ -99,7 +98,7 @@ private:
 
     static
     size_t
-    get_parent_index(
+    parent(
         size_t current_index
     ) {
         return (current_index - 1)/2;
@@ -107,7 +106,7 @@ private:
 
     static
     size_t
-    get_left_child_index(
+    left(
         size_t current_index
     ) {
         return (2*current_index) + 1;
@@ -115,7 +114,7 @@ private:
 
     static
     size_t
-    get_right_child_index(
+    right(
         size_t current_index
     ) {
         return (2*current_index) + 2;
@@ -125,18 +124,21 @@ private:
     heapify(
         size_t current_index
     ) {
-        size_t l = get_left_child_index(current_index);
-        size_t r = get_right_child_index(current_index);
-        size_t smallest = current_index;
-        if (l < m_size && m_nodes[l]->m_state.m_f < m_nodes[smallest]->m_state.m_f) {
-            smallest = l;
-        }
-        if (r < m_size && m_nodes[r]->m_state.m_f < m_nodes[smallest]->m_state.m_f) {
-            smallest = r;
-        }
-        if (smallest != current_index) {
+        for(;;) {
+            size_t l = left(current_index);
+            size_t r = right(current_index);
+            size_t smallest = current_index;
+            if (l < m_size && m_nodes[l]->m_state.m_f < m_nodes[smallest]->m_state.m_f) {
+                smallest = l;
+            }
+            if (r < m_size && m_nodes[r]->m_state.m_f < m_nodes[smallest]->m_state.m_f) {
+                smallest = r;
+            }
+            if (smallest == current_index) {
+                break;
+            }
             std::swap(m_nodes[current_index], m_nodes[smallest]);
-            heapify(smallest);
+            current_index = smallest;
         }
     }
 };
