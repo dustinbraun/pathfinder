@@ -15,6 +15,9 @@ public:
         
     }
 
+    // Returns a path from start to end.
+    // If no path is found, a path to the closest face to the end position
+    // is returned.
     std::vector<FaceId>
     search(
         const Mesh & mesh,
@@ -47,6 +50,10 @@ public:
                 }
             }
         }
+
+        Node * best_node = nullptr;
+        float best_node_distance;
+
         while (!m_node_queue.is_empty()) {
             Node & node = m_node_queue.pop_node();
             if (node.m_id.m_next_face_id == end_face_id) {
@@ -54,11 +61,28 @@ public:
             }
             node.m_state.m_is_open = false;
             node.m_state.m_is_closed = true;
+
+            if (best_node == nullptr) {
+                best_node = &node;
+                best_node_distance = best_node->m_state.m_pos.get_distance(end_pos);
+            }
+            else {
+                float distance = node.m_state.m_pos.get_distance(end_pos);
+                if (distance < best_node_distance) {
+                    best_node = &node;
+                    best_node_distance = distance;
+                }
+            }
             
             // DEBUG
             m_debug_cb(mesh, m_node_arena);
             expand_node(mesh, node, end_pos);
         }
+
+        if (best_node != nullptr) {
+            return generate_path((*best_node));
+        }
+
         return std::vector<FaceId>();
     }
 
