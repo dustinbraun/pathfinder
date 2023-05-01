@@ -38,7 +38,10 @@ public:
     insert_node(
         Node * node
     ) {
-        assert(m_size != m_capacity);
+        if (m_size == m_capacity) {
+            return;
+        }
+        // assert(m_size != m_capacity);
         size_t current_index = m_size;
         m_size++;
         m_nodes[current_index] = node;

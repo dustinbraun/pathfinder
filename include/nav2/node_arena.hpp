@@ -129,7 +129,19 @@ private:
     ) {
         // Must be order-independent because there is the same node
         // independet of the direction of edge traversal.
-        return node_id.m_prev_face_id ^ node_id.m_next_face_id;
+
+        // uint16_t min_face_id;
+        // uint16_t max_face_id;
+        // if (node_id.m_prev_face_id < node_id.m_next_face_id) {
+        //     min_face_id = node_id.m_prev_face_id;
+        //     max_face_id = node_id.m_next_face_id;
+        // }
+        // else {
+        //     min_face_id = node_id.m_next_face_id;
+        //     max_face_id = node_id.m_prev_face_id;
+        // }
+
+        return static_cast<uint32_t>(node_id.m_prev_face_id) + static_cast<uint32_t>(node_id.m_next_face_id);
     }
 };
 

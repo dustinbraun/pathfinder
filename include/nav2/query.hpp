@@ -34,18 +34,16 @@ public:
         for (size_t edge_index = 0; edge_index < 3; ++edge_index) {
             FaceId next_face_id = start_face.m_adj_ids[edge_index];
             if (next_face_id != FACE_ID_NONE) {
-                for (size_t edge_location = 0; edge_location < 3; ++edge_location) {
-                    Node * node = m_node_arena.get_node(start_face_id, next_face_id);
-                    if (node != nullptr) {
-                        node->m_state.m_pos = mesh.get_edge_center_point(start_face, edge_index); //mesh.get_edge_center_point(start_face, edge_index);
-                        node->m_state.m_g = compute_distance(start_pos, node->m_state.m_pos);
-                        node->m_state.m_f = node->m_state.m_g + compute_distance(node->m_state.m_pos, end_pos);
-                        node->m_state.m_is_open = true;
-                        m_node_queue.insert_node(node);
+                Node * node = m_node_arena.get_node(start_face_id, next_face_id);
+                if (node != nullptr) {
+                    node->m_state.m_pos = mesh.get_edge_center_point(start_face, edge_index); //mesh.get_edge_center_point(start_face, edge_index);
+                    node->m_state.m_g = compute_distance(start_pos, node->m_state.m_pos);
+                    node->m_state.m_f = node->m_state.m_g + compute_distance(node->m_state.m_pos, end_pos);
+                    node->m_state.m_is_open = true;
+                    m_node_queue.insert_node(node);
 
-                        // DEBUG
-                        m_debug_cb(mesh, m_node_arena);
-                    }
+                    // DEBUG
+                    m_debug_cb(mesh, m_node_arena);
                 }
             }
         }
@@ -90,7 +88,7 @@ private:
     ) {
         for (size_t edge_index = 0; edge_index < 3; ++edge_index) {
             FaceId next_face_id = mesh.get_face_by_id(node.m_id.m_next_face_id).m_adj_ids[edge_index];
-            if (next_face_id != FACE_ID_NONE) {
+            if (next_face_id != FACE_ID_NONE && next_face_id != node.m_id.m_prev_face_id) {
                 Node * next_node = m_node_arena.get_node(node.m_id.m_next_face_id, next_face_id);
                 if (next_node != nullptr && !next_node->m_state.m_is_closed) {
                     if (next_node->m_state.m_is_open) {
